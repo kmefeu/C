@@ -27,5 +27,5 @@ int main()
 
     printf("\n\n X + Y = %d", s = v[x] + v[y]);
 
-    printf("\n\n);
+    printf("\n\n");
 }
