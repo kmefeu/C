@@ -24,6 +24,7 @@ int main()
     salario_final = salario_inicial + (taxa_aumento * salario_inicial);
 
     ano_referencia = ano_referencia + 1;
+    
   }
 
   printf("\n\nSalario reajustado de 1997 para 2020:R$%.2f", salario_final);
