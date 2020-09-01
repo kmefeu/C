@@ -14,9 +14,9 @@ Fique a vontade para usar e colaborar com o repositório.
 
 ## Exercícios mais relevantes
 
-[Calculadora](https://github.com/kmefeu/C/blob/master/S1-CLASS-2020-04-19/ex9-calculadora.c)
+[Calculadora Básica](https://github.com/kmefeu/C/blob/master/S1-CLASS-2020-04-19/ex9-calculadora.c)
 
-[Bahskara](https://github.com/kmefeu/C/blob/master/S1-CLASS-2020-04-19/ex8-bahskara.c)
+[Bahskara para equação de segundo grau](https://github.com/kmefeu/C/blob/master/S1-CLASS-2020-04-19/ex8-bahskara.c)
 
 [Validação de Login](https://github.com/kmefeu/C/blob/master/S1-CLASS-2020-06-08/ex3-validacao-login.c)
 
