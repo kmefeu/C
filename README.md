@@ -14,12 +14,14 @@ Fique a vontade para usar e colaborar com o repositório.
 
 ## Exercícios mais relevantes
 
-[Calculadora Básica](https://github.com/kmefeu/C/blob/master/S1-CLASS-2020-04-19/ex9-calculadora.c)
+[Calculadora Básica](https://github.com/kmefeu/C/blob/master/S1-CLASS-3-FOR-SWITCH-CASE/ex9-calculadora.c)
 
-[Bahskara](https://github.com/kmefeu/C/blob/master/S1-CLASS-2020-04-19/ex8-bahskara.c)
+[Bahskara](https://github.com/kmefeu/C/blob/master/S1-CLASS-3-FOR-SWITCH-CASE/ex8-bahskara.c)
 
-[Validação de Login](https://github.com/kmefeu/C/blob/master/S1-CLASS-2020-06-08/ex3-validacao-login.c)
+[Validação de Login](https://github.com/kmefeu/C/blob/master/S1-CLASS-5-MATRIZ/ex3-validacao-login.c)
 
-[Sistema de Cadastro e Consulta](https://github.com/kmefeu/C/blob/master/S1-TEST-2020-06-22/sistema-pet.c)
+[Sistema de Cadastro e Consulta](https://github.com/kmefeu/C/blob/master/S1-TEST-2/sistema-pet.c)
+
+[Contador de Vogais](https://github.com/kmefeu/C/blob/master/S2-CLASS-1-MATRIZ/ex2-contador-vogais.c)
 
 
