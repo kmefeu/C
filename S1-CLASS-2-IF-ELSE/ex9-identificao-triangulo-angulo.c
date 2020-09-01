@@ -8,7 +8,7 @@ int main()
 
     float n1, n2, n3;
 
-    printf("\nBem vindo ao algoritimo de identificacao de triangulos!\n");
+    printf("\nAlgoritimo de identificacao de triangulos\n");
 
     printf("\n Digite a medida do primeiro angulo do triangulo:");
     scanf("%f", &n1);
