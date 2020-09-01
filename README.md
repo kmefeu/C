@@ -1,4 +1,4 @@
-# Exercícios Resolvidos de lógica de programação em linguagem C
+# Exercícios resolvidos - lógica de programação em linguagem C
 
 Esses execícios foram o meu primeiro contato com o mundo de programação. Todos os arquivos estão organizados em pastas que representam as listas de exeçicios resolvidas de determinados 
 assuntos dentro lógica de programação. Até o momento o repositório contem desde os mais básicos exécicios de operadores lógicos e matematicos até matrizes e vetores.
