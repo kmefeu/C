@@ -7,7 +7,7 @@ struct animal
     char owner[50]; // dono
     int age;        // idade
     float weight;   // peso
-    char breed[50]; //raça
+    char breed[50]; // raça
 } animal;
 
 int main()
