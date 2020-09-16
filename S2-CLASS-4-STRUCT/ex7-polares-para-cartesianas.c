@@ -40,7 +40,7 @@ int main()
 
     printf("\n\nRadios:%0.2f Angle:%0.2f", polar.r, polar.a);
 
-    cartesian.x = polar.r * cos(polar.r);
+    cartesian.x = polar.r * cos(polar.a);
     cartesian.y = polar.r * sin(polar.a);
 
     printf("\n\nCartesian coordinate: (%0.2f,%0.2f)", cartesian.x, cartesian.y); // Cordenada Cartesiana: (x,y)

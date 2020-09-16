@@ -27,7 +27,7 @@ int main()
 
     int i, ii, iii, alfaOrder[n];
 
-    for (i = 0; i < n; i++) // Grava os dados // Input of data
+    for (i = 0; i < n; i++) // Entrada de dados // Input of data
     {
 
         printf("\n\nInsert: Name Address Telephone\n");
@@ -72,18 +72,18 @@ int main()
 
                 // Tire o comentário caso queira ver o algoritimo // Remove the coment to check the algorithm
 
-                // if (users[alfaOrder[i]].nameId[iii] < users[alfaOrder[ii]].nameId[iii]) // Quando o numero do nome i é menor que o ii não tem troca de lugar // When the number in name i is smaller than the number in the name ii nothing happens
-                // {
-                //     printf("\n\n %s[%d][%d] = %c < %s[%d][%d] = %c", users[alfaOrder[i]].name, i, iii, users[alfaOrder[i]].name[iii], users[alfaOrder[ii]].name, ii, iii, users[alfaOrder[ii]].name[iii]);
-                //     break;
-                // }
+                if (users[alfaOrder[i]].nameId[iii] < users[alfaOrder[ii]].nameId[iii]) // Quando o numero do nome i é menor que o ii não tem troca de lugar // When the number in name i is smaller than the number in the name ii nothing happens
+                {
+                    printf("\n\n%s[%d][%d] = %c < %s[%d][%d] = %c", users[alfaOrder[i]].name, i, iii, users[alfaOrder[i]].name[iii], users[alfaOrder[ii]].name, ii, iii, users[alfaOrder[ii]].name[iii]);
+                    break;
+                }
 
                 if (users[alfaOrder[i]].nameId[iii] > users[alfaOrder[ii]].nameId[iii]) // Quando o numero do nome i é maior que o numero de ii eles trocam de lugar // When i is bigger than ii they switch places
                 {
-                    // printf("\n\n %s[%d][%d] = %c > %s[%d][%d] = %c", users[alfaOrder[i]].name, i, iii, users[alfaOrder[i]].name[iii], users[alfaOrder[ii]].name, ii, iii, users[alfaOrder[ii]].name[iii]);
+                    printf("\n\n%s[%d][%d] = %c > %s[%d][%d] = %c", users[alfaOrder[i]].name, i, iii, users[alfaOrder[i]].name[iii], users[alfaOrder[ii]].name, ii, iii, users[alfaOrder[ii]].name[iii]);
 
-                    // printf("\nAlfaOrder[%d ] = %s", i, users[alfaOrder[ii]].name);
-                    // printf("\nAlfaOrder[%d + %d] = %s \n\n", ii, users[alfaOrder[i]].name);
+                    printf("\nAlfaOrder[%d ] = %s", i, users[alfaOrder[ii]].name);
+                    printf("\nAlfaOrder[%d] = %s \n\n", ii, users[alfaOrder[i]].name);
 
                     int placeholder = alfaOrder[i]; // guarda provisoriamente o conteudo da posição i // holds the content of i for a moment
 
