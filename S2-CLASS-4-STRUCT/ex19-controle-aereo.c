@@ -23,8 +23,8 @@ struct flight //vôo
 
 struct airport // aeroporto
 {
-    int ft; // pousando // flights taking off
-    int fl; //  decolando // flights landing
+    int ft; // decolando // flights taking off
+    int fl; //  pousando // flights landing
 
 } a[n];
 
