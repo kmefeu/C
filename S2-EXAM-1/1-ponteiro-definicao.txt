@@ -1,0 +1,28 @@
+Elaborar um vídeo de até 15 minutos, sobre Ponteiros em C contendo:
+
+Definição
+Declaração
+Manipulação (inicialização e atribuição)
+Aritmética de ponteiros
+Operações relacionais com ponteiros
+Ponteiros e arrays
+Ponteiro para ponteiro
+
+
+________________________________________________________________________________
+
+Definição:
+
+Ponteiros são variáveis que armazenam o endereço de memória de outras variáveis 
+podendo apontar para qualquer tipo de variável. 
+
+_________________________________________________________________________________
+
+Declaração:
+
+tipo *nome_ponteiro;
+
+int *pt;
+
+_________________________________________________________________________________
+
