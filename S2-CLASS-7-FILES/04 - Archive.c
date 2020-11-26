@@ -1,34 +1,47 @@
-// Elabore um programa no qual o usuário informe o nome de um arquivo
-// texto e uma palavra, e o programa informe o número de vezes que aquela
-// palavra aparece dentro do arquivo
-
+// Elabore um programa no qual o usuário informe o nome de um arquivo texto e uma palavra, e o programa informe o número de vezes que aquela palavra aparece dentro do arquivo
 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
+int main()
+{
+    system("cls");
 
-void main(){
-    FILE *arch;
-    char name[100], search[100], line[1000];
-    int done = 0, i = 0;
+    FILE *file;
+    char fileName[100], src[100], srcWord[100], line[1000];
+    int flag = 0, i = 0;
 
-    printf("Enter archive name, do you will go modification \n");
-    scanf("%s", &name);
-    printf("Now, enter word or letter, you do want searching\n");
-    scanf("%s", &search);
+    printf("\nFile:");
+    scanf("%s", &fileName);
+    strcat(fileName, ".txt");
 
-    arch = fopen(name, "r");
+    printf("\nWord to Search:");
+    scanf("%s", &src);
 
-	search[strlen(search) -1] = 0;    
-	do{
-        fgets(line, 1000, arch);        
-		i++;        
-		if(strstr(line, search) != NULL){
-            printf("Linha %d: %s", i, line);            
-			done++;        
-		}    
-	}while(!feof(arch));
-	if(done == 0)printf("Nao foi encontrada a string");
+    printf("\n\n");
+
+    file = fopen(fileName, "r");
+
+    while (fscanf(file, "%s", &srcWord) != EOF)
+    {
+
+        if (strcmp(srcWord, src) == 0)
+        {
+            flag += 1;
+        }
+    }
+
+    if (flag > 0)
+    {
+        printf("%d incidences of the %s were found", flag, src);
+    }
+    else
+    {
+        printf("Word not Found");
+    }
+
+    printf("\n\n");
+
     return 0;
 }

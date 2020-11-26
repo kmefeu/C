@@ -3,33 +3,53 @@
 // O program termina quando o usuário digitar um número negativo.
 
 #include <stdio.h>
-#include <locale.h>
 
-void main(){
-    setlocale(LC_ALL,"portuguese");
-    FILE *arch;
-    int num, sequencia[1000], count=0;
+int main()
+{
 
-    arch = fopen("registros.txt", "wb");
+    system("cls");
 
-    if(arch == NULL) {
-        printf("Erro ao criar o arquivo");
+    FILE *file;
+    int numbers;
+    char flag = 'x';
+
+    file = fopen("BinareNumbers.txt", "wb");
+
+    if (file == NULL)
+    {
+        printf("Error to open archive\n");
+        system("pause");
         exit(1);
-    } else {
-         do{
+    }
+    else
+    {
+        do
+        {
             setbuf(stdin, NULL);
-            printf("Digite uma sequência de números (Digite número menor que 0 para encerrar a gravação)\n");
-            scanf("%d", &num);
-            
-            if (num < 0){
-                printf("Encerrando o programa");
-                break;
-            }
-            fwrite( &num, sizeof(int), 1, arch );
+            printf("\nType y to quit\n\n");
+            scanf("%c", &flag);
 
-        }while(num>=0);
-    } 
+            if (flag == 'y')
+            {
+                printf("\nQuited\n\n");
+                system("pause");
+                exit(1);
+            }
+            else
+            {
+                printf("\nNumber:");
+                scanf("%d", &numbers);
+
+                fwrite(&numbers, sizeof(int), 1, file);
+            }
+
+        } while (numbers >= 0);
+    }
+
+    printf("\n\n");
+
     getchar();
-    fclose(arch);
+    fclose(file);
+
     return 0;
 }

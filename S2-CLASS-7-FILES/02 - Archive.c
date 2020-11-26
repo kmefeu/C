@@ -1,33 +1,51 @@
-// Escreva um programa que leia do usuário os nomes de dois 
-// arquivos texto. Crie um terceiro arquivo texto com o conteúdo dos dois primeiros juntos
-// (o conteúdo do primeiro seguido do segundo).
+// Escreva um programa que leia do usuário os nomes de dois arquivos texto.
+// Crie um terceiro arquivo texto com o conteúdo dos dois primeiros juntos (o conteúdo do primeiro seguido do segundo).
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 int main()
 {
-    FILE *arch1, *arch2, *arch3;
-    char archive1[100], archive2[100];
-    printf("Hello! please, enter name of archive 1\n");
-    scanf("%s",&archive1);
-    printf("please, enter name of archive 2\n");
-    scanf("%s",&archive2);
-    arch1=fopen(archive2,"r");
-    arch2=fopen(archive1,"r");
-    arch3=fopen(strcat(strcat(archive1, archive2),".txt") ,"w");
-    if (arch1==NULL || arch2==NULL || arch3==NULL){
+    
+    system("cls");
+    
+    FILE *file1, *file2, *file3;
+    char fileName1[100], fileName2[100];
+    
+    printf("\nFile - 1:");
+    scanf("%s", &fileName1);
+    strcat(fileName1, ".txt");
+
+    printf("\nFile -2:");
+    scanf("%s", &fileName2);
+    strcat(fileName2, ".txt");
+    
+    file1 = fopen(fileName2, "r");
+    file2 = fopen(fileName1, "r");
+    file3 = fopen("BindedFiles.txt", "w");
+    
+    if (file1 == NULL || file2 == NULL || file3 == NULL)
+    {
         printf("Error to open archive\n");
         system("pause");
         exit(1);
     }
-    char letra;
-    while( (letra = fgetc(arch1)) != EOF ){
-        fprintf(arch3, "%c", letra);
+    char letter;
+    
+    while ((letter = fgetc(file1)) != EOF)
+    {
+        fprintf(file3, "%c", letter);
     }
-        while( (letra = fgetc(arch2)) != EOF ){
-        fprintf(arch3, "%c", letra);
+    
+    while ((letter = fgetc(file2)) != EOF)
+    {
+        fprintf(file3, "%c", letter);
     }
-    fclose(arch1);
-    fclose(arch2);
-    fclose(arch3);
+   
+    fclose(file1);
+    fclose(file2);
+    fclose(file3);
+    
     return 0;
 }

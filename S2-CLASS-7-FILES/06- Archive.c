@@ -3,56 +3,74 @@
 // O programa então exibe o total da compra.
 
 #include <stdio.h>
-#include <locale.h>
+#include <stdlib.h>
+void main()
+{
 
-void main() {
-   typedef struct Strucprodutos
+    system("cls");
+
+    typedef struct stcGoods
     {
         char name[100];
-        int qtt;
+        int amount;
         float price;
-    }produtos;
 
-    FILE *archive = fopen("lista.txt", "a+b");
+    } goods;
+
+    FILE *file = fopen("list.txt", "a+b");
 
     int result;
-    setlocale(LC_ALL, "Portuguese");
-    if (archive == NULL){
-        printf("Problema na criação do arquivo \n");
+
+    if (file == NULL)
+    {
+        printf("Error opening file. System Pause.\n");
         system("pause");
         exit(1);
     }
-    produtos produto;
-    printf("**Lista de compras**\n");
-    printf("Nome do Produto:\n");
-    fgets(produto.name, 99, stdin);
-    printf("Quantidade:\n");
-    scanf("%d",&produto.qtt);
-    printf("Valor unitário do produto");
-    scanf("%f",&produto.price);
+    goods item;
 
-    result = fwrite(&produto, sizeof(produtos),1,archive);
+    printf("--Shopping list--\n");
+    printf("\nitem Name:");
+    fgets(item.name, 99, stdin);
 
-    if(result== EOF){
-        printf("Erro na Gravação do produto");
+    printf("\nAmount:");
+    scanf("%d", &item.amount);
+
+    printf("\nPrice:");
+    scanf("%f", &item.price);
+
+    result = fwrite(&item, sizeof(goods), 1, file);
+
+    if (result == EOF)
+    {
+        printf("Error registering item\n");
     }
-    fclose(archive);
 
-    archive = fopen("lista.txt", "r+b");
-    if( archive == NULL){
-        printf("Erro na abertura do arquivo");
+    fclose(file);
+
+   file = fopen("list.txt", "r+b");
+
+    if (file == NULL)
+    {
+        printf("Error opening file. System Pause.\n");
+        system("pause");
         exit(1);
-        getchar();
     }
+
     printf("\n\n");
-    while(!feof(archive)){
-        fread(&produto, sizeof(produto),1, archive);
-        if(feof(archive)){
+
+    while (!feof(file))
+    {
+        fread(&item, sizeof(item), 1, file);
+
+        if (feof(file))
+        {
             break;
         }
-        printf("Produto:%sQuantidade:%d\nPreço: %.2f\n\n", produto.name, produto.qtt, produto.price);
+
+        printf("\nItem:%sAmount:%d\nPrice:%.2f\n\n", item.name, item.amount, item.price);
     }
 
-    fclose(archive);
-    return 0;    
+    fclose(file);
+    return 0;
 }
