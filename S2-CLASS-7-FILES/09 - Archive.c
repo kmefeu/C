@@ -2,31 +2,38 @@
 //  e retorne qunatas vogais esse arquivo possui.
 
 #include <stdio.h>
-#include <locale.h>
 #include <string.h>
 
-void main() {
-    setlocale(LC_ALL, "Portuguese");
+void main()
+{
 
-    char archive[100];
-    char letra;
-    int qtt=0;
-    printf("Digite nome do arquivo a ser analisado (ex: arquivotexto.TXT)\n");
-    scanf("%s", &archive);
-    FILE *analise = fopen(archive, "r");
-    
-    if(analise == NULL){
-        printf("It happened a problem to open archive\n");
-        getchar();
-        exit(1);
+    char fileName[100];
+    char letter;
+    int n = 0;
+
+    printf("\nFile:");
+    scanf("%s", &fileName);
+    strcat(fileName, ".txt");
+
+    FILE *file = fopen(fileName, "r");
+
+     if (file == NULL)
+   {
+      printf("\nError opening file. System Pause.\n");
+      system("pause");
+      exit(1);
+   }
+
+    while ((letter = fgetc(file)) != EOF)
+    {
+        if (letter == 'a' || letter == 'e' || letter == 'i' || letter == 'o' || letter == 'u')
+            n++;
     }
-    printf("Abriu o arquivo\n");
-     while( (letra = fgetc(analise)) != EOF ) {
-        if(letra =='a' || letra =='e' || letra =='i' || letra =='o' || letra =='u')qtt++;
-    }
-    
-    printf("\n\nA quantidade de vogais contidas nesse arquivo é = %d\n\n", qtt);
-    fclose(analise);
+
+    printf("\n\nVowel incidences: %d\n", n);
+    fclose(file);
+
+    printf("\n\n");
+
     return 0;
-
 }

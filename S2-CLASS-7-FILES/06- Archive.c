@@ -19,7 +19,7 @@ void main()
 
     FILE *file = fopen("list.txt", "a+b");
 
-    int result;
+    int result, total = 0;
 
     if (file == NULL)
     {
@@ -48,7 +48,7 @@ void main()
 
     fclose(file);
 
-   file = fopen("list.txt", "r+b");
+    file = fopen("list.txt", "r+b");
 
     if (file == NULL)
     {
@@ -57,6 +57,14 @@ void main()
         exit(1);
     }
 
+    FILE *file2 = fopen("total.txt", "w+b");
+
+    if (file2 == NULL)
+    {
+        printf("Error opening file. System Pause.\n");
+        system("pause");
+        exit(1);
+    }
     printf("\n\n");
 
     while (!feof(file))
@@ -68,9 +76,18 @@ void main()
             break;
         }
 
+        total = (item.amount * item.price) + total;
+
         printf("\nItem:%sAmount:%d\nPrice:%.2f\n\n", item.name, item.amount, item.price);
     }
 
+    printf("\nTotal:%d", total);
+
+    printf("\n\n");
+
+
     fclose(file);
+    fclose(file2);
+
     return 0;
 }
