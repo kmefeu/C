@@ -4,14 +4,20 @@
 void cadastrarPacientes();
 void listarPacientes();
 void excluirPacientes();
-void listarPacientesPorCodigo();
+void pesquisarPacientesPorCodigo();
 
 typedef struct estruturaPacientes
 {
     int codigo;
     char nome[26];
-    char endereco[31];
-    char cpf[15];
+    char telefone[31];
+    char sexo[15];
+    struct
+    {
+        int dia;
+        int mes;
+        int ano;
+    } nas;
     int flag;
 } Pacientes;
 
@@ -23,10 +29,10 @@ int main()
     do
     {
         printf("Menu Principal\n");
-        printf("1 - Incluir Pacientes\n");
-        printf("2 - Listar  Pacientes\n");
-        printf("3 - Excluir Pacientes\n");
-        printf("4 - Listar  Pacientes por codigo\n");
+        printf("1 - Incluir    Pacientes\n");
+        printf("2 - Listar     Pacientes\n");
+        printf("3 - Excluir    Pacientes\n");
+        printf("4 - Pesquisar  Paciente por codigo\n");
         printf("5 - Encerrar aplicativo\n");
         printf("Opcao:");
         scanf("%d", &opcao);
@@ -47,7 +53,7 @@ int main()
         }
         if (opcao == 4)
         {
-            listarPacientesPorCodigo();
+            pesquisarPacientesPorCodigo();
         }
 
     } while (opcao != 5);
@@ -59,21 +65,29 @@ void cadastrarPacientes()
 
     int resp;
     Pacientes TBPacientes; 
-    printf("Cadatrar Dados de Pacientes\n\n");
-    printf("Codigo:");
+    printf("\nCadatrar Dados de Pacientes\n\n");
+    printf("\nCodigo:");
     scanf("%d", &TBPacientes.codigo);
-    getchar(); 
-    printf("Nome:");
+    getchar();
+    printf("\nNome:");
     fgets(TBPacientes.nome, 26, stdin);
-    printf("Endereco:");
-    fgets(TBPacientes.endereco, 31, stdin);
-    printf("CPF:");
-    fgets(TBPacientes.cpf, 15, stdin);
-    TBPacientes.flag = 1; 
+    printf("\nTelefone:");
+    fgets(TBPacientes.telefone, 31, stdin);
+    printf("\nSexo (Masculino - Feminino):");
+    fgets(TBPacientes.sexo, 15, stdin);
+    printf("\n\nData de Nascimento\n");
+    printf("\nDia:");
+    scanf("%d", &TBPacientes.nas.dia);
+    printf("\nMes:");
+    scanf("%d", &TBPacientes.nas.mes);
+    printf("\nAno:");
+    scanf("%d", &TBPacientes.nas.ano);
+
+    TBPacientes.flag = 1; //pacientes        ativo
     FILE *fp = fopen("pacientes.txt", "a+b");
     if (fp == NULL)
     {
-        printf("Erro na abertura do arquivo.");
+        printf("\nERRO: Nao foi possivel abrir o arquivo.");
         exit(1);
         getchar();
     }
@@ -85,7 +99,7 @@ void cadastrarPacientes()
     }
     fclose(fp);
     system("cls");
-    printf("\nPressione qualquer tecla para continuar\n");
+    printf("\nPressione qualquer tecla para continuar");
     getchar();
     system("cls");
 }
@@ -112,14 +126,14 @@ void listarPacientes()
         if (TBPacientes.flag == 1)
         {
             printf("\n\n");
-            printf("\nCodigo:%d\nNome:%sEndereco:%sCPF:%sFlag:%d\n", TBPacientes.codigo, TBPacientes.nome, TBPacientes.endereco, TBPacientes.cpf, TBPacientes.flag);
+            printf("\nCodigo:%d\nNome:%sTelefone:%sSexo:%sData de Nascimento:%d/%d/%d\nFlag:%d\n", TBPacientes.codigo, TBPacientes.nome, TBPacientes.telefone, TBPacientes.sexo, TBPacientes.nas.dia, TBPacientes.nas.mes, TBPacientes.nas.ano, TBPacientes.flag);
         }
     }
     fclose(fp);
-    printf("\nPressione qualquer tecla para continuar\n");
+    printf("\nPressione qualquer tecla para continuar");
     getchar();
     getchar();
-    system("cls");
+    
 }
 
 void excluirPacientes()
@@ -139,7 +153,7 @@ void excluirPacientes()
         getchar();
     }
 
-    printf("Digite o codigo de quem deseja excluir: ");
+    printf("\nDigite o codigo de quem deseja excluir: ");
     scanf("%d", &codigo);
 
     while (!feof(arquivo))
@@ -160,7 +174,7 @@ void excluirPacientes()
             resp = fwrite(&TBPacientes, sizeof(Pacientes), 1, arquivonovo);
             if (resp != 1)
             {
-                printf("\nNao foi possivel excluir o cliente.\n");
+                printf("\nNao foi possivel excluir o paciente.");
             }
         }
     }
@@ -172,17 +186,16 @@ void excluirPacientes()
     if (verifica == 0)
         printf("\nPaciente nao encontrado\n");
     else
-        printf("\nPaciente:%s excluido\n", TBPacientes.nome);
-    printf("\nPressione qualquer tecla para continuar\n");
+        printf("\nPaciente:%s Excluido\n", TBPacientes.nome);
+    printf("\nPressione qualquer tecla para continuar");
     getchar();
     getchar();
     system("cls");
 }
 
-void listarPacientesPorCodigo()
+void pesquisarPacientesPorCodigo()
 {
     int cod, contador = 0, i, j, aux;
-    int *cods = NULL;
 
     Pacientes TBPacientes;
     FILE *fp = fopen("pacientes.txt", "r+b");
@@ -193,61 +206,26 @@ void listarPacientesPorCodigo()
         getchar();
     }
 
+    printf("\nDigite o codigo para pesquisa:");
+    scanf("%d", &cod);
+
     while (!feof(fp))
     {
-        if (feof(fp))
-        {
-            break;
-        }
         fread(&TBPacientes, sizeof(TBPacientes), 1, fp);
-        contador++;
-    }
-    cods = (int *)malloc(contador * sizeof(int));
-    rewind(fp);
-    for (i = 0; i < contador; i++)
-    {
-        fseek(fp, i * sizeof(Pacientes), SEEK_SET);
-        fread(&TBPacientes, sizeof(Pacientes), 1, fp);
-        if (feof(fp))
+        if (TBPacientes.codigo == cod)
         {
+            printf("\nCodigo:%d\nNome:%sTelefone:%sSexo:%sData de Nascimento:%d/%d/%d\n", TBPacientes.codigo, TBPacientes.nome, TBPacientes.telefone, TBPacientes.sexo, TBPacientes.nas.dia, TBPacientes.nas.mes, TBPacientes.nas.ano);
             break;
         }
-        cods[i] = TBPacientes.codigo;
-    }
-    for (i = 0; i < contador; i++)
-    {
-        for (j = 0; j < contador; j++)
+        if (feof(fp))
         {
-            if (cods[i] < cods[j])
-            {
-                aux = cods[i];
-                cods[i] = cods[j];
-                cods[j] = aux;
-            }
+            printf("\nCodigo nao encontrado.\n");
+            break;
         }
     }
-
-    rewind(fp);
-
-    for (i = 0; i <= contador; i++)
-    {
-        while (!feof(fp))
-        {
-            fread(&TBPacientes, sizeof(TBPacientes), 1, fp);
-            if (feof(fp))
-            {
-                rewind(fp);
-                break;
-            }
-            if (TBPacientes.codigo == cods[i])
-            {
-                printf("Codigo:%d\nNome:%sEndereco:%sCPF:%s\n", TBPacientes.codigo, TBPacientes.nome, TBPacientes.endereco, TBPacientes.cpf);
-                getchar();
-            }
-        }
-    }
+    getchar();
     fclose(fp);
-    printf("\nPressione qualquer tecla para continuar\n");
+    printf("\nPressione qualquer tecla para continuar");
     getchar();
     getchar();
     system("cls");
