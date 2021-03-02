@@ -31,7 +31,7 @@ Feel free to use and collaborate with the repository.
 
 I know two ways of making C file run in your computer. 
 
-1# Using [Codebloks Installer](https://sourceforge.net/projects/codeblocks/files/Binaries/20.03/Windows/codeblocks-20.03mingw-setup.exe/download), probaly is the easyest way! If you dont mind installign Codebloks when you download it and install the [codeblocks-20.03mingw-setup.exe](https://www.codeblocks.org/downloads/binaries/) the Codeblocks will setup the gcc compiler that allow your computer to run C files.
+1# Using [Codebloks Installer](https://www.codeblocks.org/downloads/binaries/), probaly is the easyest way! If you dont mind installign Codebloks when you download it and install the [codeblocks-20.03mingw-setup.exe](https://sourceforge.net/projects/codeblocks/files/Binaries/20.03/Windows/codeblocks-20.03mingw-setup.exe/download) the Codeblocks will setup the gcc compiler that allow your computer to run C files.
 
 2# Using on VSCode, probaly the best way. If you follow this tutorial from [javapoint](https://www.javatpoint.com/how-to-run-a-c-program-in-visual-studio-code) you will be abble to run C files on your VScode. To improve your experience I recomend you to install those plugins on your VSCode, it will allow to run you code by just pressing F6.
 
