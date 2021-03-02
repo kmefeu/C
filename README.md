@@ -35,6 +35,6 @@ I know two ways of making C file run in your computer.
 
 2# Using on VSCode, probaly the best way. If you follow this tutorial from [javapoint](https://www.javatpoint.com/how-to-run-a-c-program-in-visual-studio-code) you will be abble to run C files on your VScode. To improve your experience I recomend you to install those plugins on your VSCode, it will allow to run you code by just pressing F6.
 
-[C/C++ Microsoft](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
-[C/C++ Compile Run](https://marketplace.visualstudio.com/items?itemName=danielpinto8zz6.c-cpp-compile-run)
-[Code Runner](https://marketplace.visualstudio.com/items?itemName=formulahendry.code-runner)
+[C/C++ Microsoft](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools),
+[C/C++ Compile Run](https://marketplace.visualstudio.com/items?itemName=danielpinto8zz6.c-cpp-compile-run),
+[Code Runner](https://marketplace.visualstudio.com/items?itemName=formulahendry.code-runner).
