@@ -37,19 +37,19 @@ int menu(int *v, int *size, int *maxSize)
     case 3:
         printf("\nNew element: ");
         scanf("%d", &e);
-        addVet(v, size, maxSize, e);
+        v = addVet(v, size, maxSize, e);
         return 1;
         break;
     case 4:
         printf("\nFind element: ");
         scanf("%d", &e);
-        find(&v, *size, e);
+        find(v, *size, e);
         return 1;
         break;
     case 5:
         printf("\nChoose element to delete: ");
         scanf("%d", &e);
-        removeVet(v, *size, *maxSize, e);
+        v = removeVet(v, (int *)*size, (int *)*maxSize, e);
         return 1;
         break;
     case 6:
@@ -62,7 +62,7 @@ int menu(int *v, int *size, int *maxSize)
     }
 }
 
-void main()
+int main()
 {
     int *v;
     int size, maxSize, m = 1;
@@ -73,11 +73,13 @@ void main()
     printf("Welcome to Application!\n");
     do
     {
-        m = menu(&v, &size, &maxSize);
+        m = menu((int *)&v, &size, &maxSize);
 
     } while (m == 1);
 
     printf("\nClosing application");
+
+    return 0;
 }
 
 int *initVet(int *size, int *maxSize)
@@ -88,9 +90,9 @@ int *initVet(int *size, int *maxSize)
     int *v = NULL;
 
     // aloca espaço de memória o novo vetor
-    v = malloc((*maxSize + *size) * sizeof(int));
+    v = (int *)malloc((*maxSize + *size) * sizeof(int));
 
-    return &v;
+    return v;
 }
 
 void printVet(int *v, int size, int maxSize)
@@ -107,7 +109,7 @@ void printVet(int *v, int size, int maxSize)
     {
 
         // imprime cada valor dentro do vetor
-        or (int i = 0; i < size; i++)
+        for (int i = 0; i < size; i++)
         {
             printf("%d ", v[i]);
         }
@@ -117,12 +119,13 @@ void printVet(int *v, int size, int maxSize)
 int *addVet(int *v, int *size, int *maxSize, int e)
 {
     printf("\nsize = %d", *size);
-    printf("\nmaxSize = %d", *maxSize);
+    printf("\nmaxSize = %d\n", *maxSize);
 
     if ((*size) >= *maxSize)
     {
         // Se o vetor já está cheio deve ser criado um novo com o dobro do tamanho do atual
-        int *newV = malloc((*maxSize * 2) * sizeof(int));
+        int *newV = NULL;
+        newV = (int *)malloc((*maxSize * 2) * sizeof(int));
 
         // após criar o novo vetor com o dobro do tamanho ele recebe todos os valores do antigo
         for (int i = 0; i < *size; i++)
@@ -130,11 +133,11 @@ int *addVet(int *v, int *size, int *maxSize, int e)
             newV[i] = v[i];
         }
 
-        printf("e = %d\n", e);
+        printf("\ne = %d\n", e);
 
         // aqui é adicionado o novo valor no final do vetor
-        newV[*size] = &e;
-        printf("newV[%d]%d\n", *size, newV[*size]);
+        newV[*size] = e;
+        printf("\nnewV[%d]%d\n", *size, newV[*size]);
 
         // aqui o valor de maxSize é atualizado
         *maxSize = *maxSize * 2;
@@ -142,9 +145,8 @@ int *addVet(int *v, int *size, int *maxSize, int e)
         // aqui o valor de sizer é atualizado
         *size = *size + 1;
 
-        // aqui o ponterio antigo recebe o endereço do novo vetor (Não sei se isso funciona)
-        v = &newV;
-        return v;
+        // retorna o novo vetor
+        return newV;
     }
     // aqui é quando o vetor não está totalmente ocupado por tanto é possivel adicionar mais um elemento
     else
@@ -156,7 +158,7 @@ int *addVet(int *v, int *size, int *maxSize, int e)
         // aqui o valor de sizer é atualizado
         *size = *size + 1;
 
-        // retorna o mesmo endeço de memoria do vetor(?)
+        // retorna o mesmo endeço de memoria do vetor
         return v;
     }
 }
@@ -179,24 +181,74 @@ int find(int *v, int size, int e)
     }
 
     printf("\nElement not found.\n");
-
     return -1;
 }
 
 int *removeVet(int *v, int *size, int *maxSize, int e)
 {
+    int foundAt;
     // percore todo o vetor
-    for (int i = 0; i < *maxSize; i++)
+    for (int i = 0; i < *size; i++)
     {
         // se o valor atual do vetor for igual o valor procurado
         if (v[i] == e)
         {
-            free(v[i]);
-            *size = *size - 1;
+            //guarda a posição da ocorrencia
+            foundAt = i;
+            // verifica se o vetor vai ficar menor do 1/4 do total de memória alocada depois de retirar o valor pedido
+            if ((*size - 1) <= (*maxSize / 4))
+            {
+                int *newV = NULL;
+                // aloca no vetor newV um vetor duas vezes menor que o vetor anterior
+                newV = (int *)malloc((*maxSize / 2) * sizeof(int));
+                // percore todo o vetor antigo para passar os valores para o novo porem retirando o valor E solicitado
+                for (int i = 0, j = 0; j < *size; i++, j++)
+                {
+                    if (i != foundAt)
+                    {
+                        newV[i] = v[j];
+                    }
+                    else
+                    {
+                        j++;
+                    }
+                }
+                // atualiza o tamanho de maxSize
+                *maxSize = (*maxSize / 2);
+                // atualiza o tamanho de size
+                *size = *size - 1;
+
+                printf("\nElement deleted.\n");
+
+                // retorna o endereço do novo vetor sem o elemento e com o maxSize menor
+                return newV;
+            }
+            else
+            {
+                int *newV = NULL;
+                newV = (int *)malloc((*maxSize) * sizeof(int));
+                // percore todo o vetor antigo para passar os valores para o novo porem retirando o valor E solicitado
+                for (int i = 0, j = 0; j < *size; i++, j++)
+                {
+                    if (i != foundAt)
+                    {
+                        newV[i] = v[j];
+                    }
+                    else
+                    {
+                        j++;
+                    }
+                }
+                // atualiza o tamanho de size
+                *size = *size - 1;
+
+                printf("\nElement deleted.\n");
+
+                // retorna o endereço do novo vetor sem o elemento
+                return newV;
+            }
         }
     }
-
-    // Retornar o vetor com as posições atualizadas. Conforme a proptype
-
-    return 1;
+    printf("\nElement not found.\n");
+    return v;
 }
