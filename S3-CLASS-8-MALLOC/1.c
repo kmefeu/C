@@ -116,10 +116,9 @@ void printVet(int *v, int size, int maxSize)
 
 int *addVet(int *v, int *size, int *maxSize, int e)
 {
-    // printf("\nsize = %d", *size);
-    // printf("\nmaxSize = %d", *maxSize);
+    printf("\nsize = %d", *size);
+    printf("\nmaxSize = %d", *maxSize);
 
-    // Não sei se esse condicional está certo
     if ((*size) >= *maxSize)
     {
         // Se o vetor já está cheio deve ser criado um novo com o dobro do tamanho do atual
@@ -131,36 +130,35 @@ int *addVet(int *v, int *size, int *maxSize, int e)
             newV[i] = v[i];
         }
 
-        printf("%d\n", e);
+        printf("e = %d\n", e);
 
         // aqui é adicionado o novo valor no final do vetor
-        // newV[*size] = &e;
-
-        // printf("%d\n", newV[*size]);
+        newV[*size] = &e;
+        printf("newV[%d]%d\n", *size, newV[*size]);
 
         // aqui o valor de maxSize é atualizado
         *maxSize = *maxSize * 2;
 
         // aqui o valor de sizer é atualizado
-        // *size = *size + 1;
+        *size = *size + 1;
 
         // aqui o ponterio antigo recebe o endereço do novo vetor (Não sei se isso funciona)
         v = &newV;
         return v;
     }
     // aqui é quando o vetor não está totalmente ocupado por tanto é possivel adicionar mais um elemento
-    // if (*size < *maxSize)
-    // {
-    // o elemento deve ser adicionado depois do ultimo espaço já ocupado definido pelo tamanho do vetor
+    else
+    {
+        // o elemento deve ser adicionado depois do ultimo espaço já ocupado definido pelo tamanho do vetor
 
-    v[*size] = e;
+        v[*size] = e;
 
-    // aqui o valor de sizer é atualizado
-    *size = *size + 1;
+        // aqui o valor de sizer é atualizado
+        *size = *size + 1;
 
-    // retorna o mesmo endeço de memoria do vetor(?)
-    return v;
-    // }
+        // retorna o mesmo endeço de memoria do vetor(?)
+        return v;
+    }
 }
 
 int find(int *v, int size, int e)
