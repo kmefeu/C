@@ -125,7 +125,7 @@ int *addVet(int *v, int *size, int *maxSize, int e)
     {
         // Se o vetor já está cheio deve ser criado um novo com o dobro do tamanho do atual
         int *newV = NULL;
-        newV = (int *)malloc((*maxSize * 2) * sizeof(int));
+        newV = (int *)malloc(((*maxSize) * 2) * sizeof(int));
 
         // após criar o novo vetor com o dobro do tamanho ele recebe todos os valores do antigo
         for (int i = 0; i < *size; i++)
