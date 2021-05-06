@@ -103,7 +103,7 @@ int inicializar(lista **ponteiroParaLista)
 
 int inicializarOcorrencia(listaDeOcorrencia **ponteiroParaLista)
 {
-    lista *percorre, *aux;
+    listaDeOcorrencia *percorre, *aux;
     if (*ponteiroParaLista != NULL)
     {
         percorre = *ponteiroParaLista;
@@ -272,6 +272,26 @@ int inverterLista(lista *ponteiroParaListaOriginal, lista **ponteiroParaListaInv
         }
 
         *ponteiroParaListaInvertida = aux_2;
+    }
+    return 0;
+}
+
+int analiseRecursiva(lista *ponteiroParaListaAnalisada)
+{
+
+    lista *percorre, *aux;
+    if (*ponteiroParaListaAnalisada != NULL)
+    {
+        percorre = *ponteiroParaListaAnalisada;
+        while (percorre != NULL)
+        {
+            aux = percorre;
+            percorre = percorre->prox;
+            free(aux);
+        }
+
+        *ponteiroParaListaAnalisada = NULL;
+        return 1;
     }
     return 0;
 }
