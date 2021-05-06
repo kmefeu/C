@@ -18,11 +18,11 @@ typedef struct Lo
 int inicializar(lista **ponteiroParaLista);
 int inicializarOcorrencia(listaDeOcorrencia **ponteiroParaLista);
 int adicionar(int numero, char letra, lista **ponteiroParaLista);
-int capturarMaiorOcorrencia(lista *ponteiroParaListaAnalisada, listaDeOcorrencia **ponteiroParaListaResposta);
-int imprime(lista *ponteiroParaInicioDaLista);
-int imprimeOcorrencia(listaDeOcorrencia *ponteiroParaInicioDaLista);
-int inverterLista(lista *ponteiroParaListaOriginal, lista **ponteiroParaListaInvertida);
-int analiseRecursiva(lista *ponteiroParaListaAnalisada);
+int capturarMaiorOcorrencia(lista *ponteiroParaLista, listaDeOcorrencia **ponteiroParaListaResposta);
+int imprime(lista *ponteiroParaLista);
+int imprimeOcorrencia(listaDeOcorrencia *ponteiroParaLista);
+int inverterLista(lista *ponteiroParaLista, lista **ponteiroParaListaInvertida);
+int analiseRecursiva(lista *ponteiroParaLista);
 
 int main(void)
 {
@@ -32,48 +32,62 @@ int main(void)
     lista *noInicialDaListaOriginal, *noInicialDaListaInvertida;
     listaDeOcorrencia *noInicialDaListaDeOcorrencia;
 
+    noInicialDaListaOriginal = NULL;
+    noInicialDaListaInvertida = NULL;
+    noInicialDaListaDeOcorrencia = NULL;
+
     // inicia todas as listas zeradas
-    inicializar(&noInicialDaListaOriginal);
-    inicializarOcorrencia(&noInicialDaListaDeOcorrencia);
-    inicializar(&noInicialDaListaInvertida);
+    // inicializar(&noInicialDaListaOriginal);
+    // inicializarOcorrencia(&noInicialDaListaDeOcorrencia);
+    // inicializar(&noInicialDaListaInvertida);
 
     do
     {
         system("cls");
-        printf("\n\nOpcoes: \n\n");
         printf("1 -> Adicionar Elementos (20 Elementos)\n");
-        printf("2 -> Imprimir Maiores e Menores Ocorencias\n");
-        printf("3 -> Gerar e Imprimir Lista inversa\n");
-        printf("4 -> Encontrar nós com vogáis e simultaneamente números divisíveis por 10\n");
+        printf("2 -> Imprimir Lista\n");
+        printf("3 -> Imprimir Maiores e Menores Ocorencias\n");
+        printf("4 -> Gerar e Imprimir Lista inversa\n");
+        printf("5 -> Encontrar nos com vogais e simultaneamente numeros divisiveis por 10\n");
+        printf("6 -> Fechar\n");
+        printf("\n\nOpcoes: ");
         scanf("%d", &opcao);
         switch (opcao)
         {
         case 1:
-            for (int i; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
-                printf("\nNumero para inserir na lista: ");
+                printf("\nNumero: ");
                 scanf("%d", &numero);
-                printf("\nLetra para inserir na lista: ");
+                getchar();
+                printf("Letra: ");
                 scanf("%c", &letra);
                 adicionar(numero, letra, &noInicialDaListaOriginal);
             }
             break;
         case 2:
+            imprime(noInicialDaListaOriginal);
+            getchar();
+            break;
+
+        case 3:
             printf("\n-> Buscando maiores e menores ocorrencias");
             capturarMaiorOcorrencia(noInicialDaListaOriginal, &noInicialDaListaDeOcorrencia);
             imprimeOcorrencia(noInicialDaListaDeOcorrencia);
+            getchar();
             break;
-        case 3:
+        case 4:
             printf("\n-> Invertendo lista");
             inverterLista(noInicialDaListaOriginal, &noInicialDaListaInvertida);
             imprime(noInicialDaListaInvertida);
+            getchar();
             break;
-        case 4:
+        case 5:
             printf("\n-> Fazendo analise recursiva");
             resultadoAnaliseRecursiva = analiseRecursiva(noInicialDaListaOriginal);
             printf("\n-> Resultado: %d", resultadoAnaliseRecursiva);
             break;
-        case 7:
+        case 6:
             break;
         default:
             printf("\n\n Opcao nao valida");
@@ -96,7 +110,6 @@ int inicializar(lista **ponteiroParaLista)
         }
 
         *ponteiroParaLista = NULL;
-        return 1;
     }
     return 0;
 }
@@ -126,66 +139,81 @@ int adicionar(int numero, char letra, lista **ponteiroParaLista)
     novoNo = (lista *)malloc(sizeof(lista));
     novoNo->numero = numero;
     novoNo->letra = letra;
+    novoNo->prox = NULL;
 
     if (*ponteiroParaLista == NULL)
     {
-        novoNo->prox = NULL;
         *ponteiroParaLista = novoNo;
     }
     else
     {
         lista *percorre;
+        int flag;
         percorre = *ponteiroParaLista;
 
         while (percorre->prox != NULL)
         {
+            flag = true;
             // se o numero do novo no for menor que o proximo numero ele entra na frente da lista
             if (novoNo->numero < percorre->numero)
             {
+                flag = false;
                 break;
             }
-            percorre = percorre->prox;
+            if (flag)
+            {
+                percorre = percorre->prox;
+            }
         }
-        // novoNo recebe como proximo o numero de maior valor
-        novoNo->prox = percorre->prox;
-        // o endereço do antigo menor numero recebe o endereço do novoNo
-        percorre->prox = novoNo;
+        if (!flag)
+        {
+
+            // novoNo recebe como proximo o numero de maior valor
+            novoNo->prox = percorre;
+            // o endereço do antigo menor numero recebe o endereço do novoNo
+            *ponteiroParaLista = novoNo;
+        }
+        else
+        {
+            percorre->prox = novoNo;
+        }
     }
     return 0;
 }
 
-int capturarMaiorOcorrencia(lista *ponteiroParaListaAnalisada, listaDeOcorrencia **ponteiroParaListaResposta)
+int capturarMaiorOcorrencia(lista *ponteiroParaLista, listaDeOcorrencia **ponteiroParaListaResposta)
 {
 
     int numeroDeMaiorOcorrencia, maiorOcorrencia = 0, numeroDeMenorOcorrencia, menorOcorrencia = 0, ocorrencias = 0, numeroEmComparacao;
 
     lista *percorre1, *percorre2;
-    percorre1 = ponteiroParaListaAnalisada;
-    percorre2 = ponteiroParaListaAnalisada;
+    percorre1 = ponteiroParaLista;
+
     numeroDeMaiorOcorrencia = percorre1->numero;
     numeroDeMenorOcorrencia = percorre1->numero;
 
-    while (percorre1->prox != NULL)
+    while (percorre1 != NULL)
     {
         numeroEmComparacao = percorre1->numero;
         ocorrencias = 0;
+        percorre2 = ponteiroParaLista;
 
-        while (percorre2->prox != NULL)
+        while (percorre2 != NULL)
         {
+
             if (numeroEmComparacao == percorre2->numero)
             {
-                ocorrencias = ocorrencias + 1;
+                ocorrencias++;
             }
-
             percorre2 = percorre2->prox;
         }
 
-        if (maiorOcorrencia < ocorrencias)
+        if (maiorOcorrencia <= ocorrencias)
         {
             maiorOcorrencia = ocorrencias;
             numeroDeMaiorOcorrencia = numeroEmComparacao;
         }
-        if (menorOcorrencia > ocorrencias)
+        if (menorOcorrencia >= ocorrencias)
         {
             menorOcorrencia = ocorrencias;
             numeroDeMenorOcorrencia = numeroEmComparacao;
@@ -194,59 +222,67 @@ int capturarMaiorOcorrencia(lista *ponteiroParaListaAnalisada, listaDeOcorrencia
     }
 
     // cria um novo no
-    listaDeOcorrencia *novoNo;
+    listaDeOcorrencia *novoNo, *novoNo2;
     novoNo = (listaDeOcorrencia *)malloc(sizeof(listaDeOcorrencia));
     novoNo->numero = numeroDeMaiorOcorrencia;
     novoNo->numeroDeOcorrencias = maiorOcorrencia;
 
-    //usa o no inicical vazio
-    (*ponteiroParaListaResposta)->numero = numeroDeMenorOcorrencia;
-    (*ponteiroParaListaResposta)->numeroDeOcorrencias = menorOcorrencia;
-    (*ponteiroParaListaResposta)->prox = novoNo;
+    // cria um novo no
+    novoNo2 = (listaDeOcorrencia *)malloc(sizeof(listaDeOcorrencia));
+    novoNo2->numero = numeroDeMenorOcorrencia;
+    novoNo2->numeroDeOcorrencias = menorOcorrencia;
+    novoNo2->prox = NULL;
 
+    // vincula os nos
+    novoNo->prox = novoNo2;
+
+    // passa o endereço da nova lista
+    *ponteiroParaListaResposta = novoNo;
+
+    printf("\nBRASIL SIL!");
     return 0;
 }
 
-int imprime(lista *ponteiroParaInicioDaLista)
+int imprime(lista *ponteiroParaLista)
 {
     int i;
-    if (ponteiroParaInicioDaLista == NULL)
+    if (ponteiroParaLista == NULL)
     {
         return 1; /* lista vazia */
     }
-    printf("LISTA ::  ");
-    while (ponteiroParaInicioDaLista != NULL)
+    printf("\nLISTA ::  \n");
+    while (ponteiroParaLista != NULL)
     {
-        printf(" %d", ponteiroParaInicioDaLista->numero);
-        printf(" %c\n", ponteiroParaInicioDaLista->letra);
-        ponteiroParaInicioDaLista = ponteiroParaInicioDaLista->prox;
+        printf("\n %d", ponteiroParaLista->numero);
+        printf(" %c\n", ponteiroParaLista->letra);
+        ponteiroParaLista = ponteiroParaLista->prox;
     }
     printf("\n");
     return 0; /* sem erro */
 }
 
-int imprimeOcorrencia(listaDeOcorrencia *ponteiroParaInicioDaLista)
+int imprimeOcorrencia(listaDeOcorrencia *ponteiroParaLista)
 {
     int i;
-    if (ponteiroParaInicioDaLista == NULL)
+    if (ponteiroParaLista == NULL)
     {
         return 1; /* lista vazia */
     }
-    printf("LISTA ::  ");
-    while (ponteiroParaInicioDaLista != NULL)
+    printf("\nLISTA ::  \n");
+    while (ponteiroParaLista != NULL)
     {
-        printf(" %d", ponteiroParaInicioDaLista->numero);
-        printf(" %d\n", ponteiroParaInicioDaLista->numeroDeOcorrencias);
-        ponteiroParaInicioDaLista = ponteiroParaInicioDaLista->prox;
+        printf("\nNumero: %d", ponteiroParaLista->numero);
+        printf("\nOcorrencias: %d\n", ponteiroParaLista->numeroDeOcorrencias);
+        ponteiroParaLista = ponteiroParaLista->prox;
     }
     printf("\n");
     return 0; /* sem erro */
 }
 
-int inverterLista(lista *ponteiroParaListaOriginal, lista **ponteiroParaListaInvertida)
+int inverterLista(lista *ponteiroParaLista, lista **ponteiroParaListaInvertida)
 {
     lista *percorre, *aux_1, *aux_2, *aux_3;
-    percorre = ponteiroParaListaOriginal;
+    percorre = ponteiroParaLista;
     if (percorre == NULL)
     {
         return 1; /*Caso a lista esteja vazia. */
@@ -257,7 +293,7 @@ int inverterLista(lista *ponteiroParaListaOriginal, lista **ponteiroParaListaInv
     }
     else
     {
-        aux_1 = ponteiroParaListaOriginal;
+        aux_1 = ponteiroParaLista;
         aux_2 = aux_1->prox;
         aux_3 = aux_2->prox;
         aux_1->prox = NULL;
@@ -276,22 +312,49 @@ int inverterLista(lista *ponteiroParaListaOriginal, lista **ponteiroParaListaInv
     return 0;
 }
 
-int analiseRecursiva(lista *ponteiroParaListaAnalisada)
+int recursiva(lista *percorre, char vogais[], int *contador)
 {
 
-    lista *percorre, *aux;
-    if (*ponteiroParaListaAnalisada != NULL)
+    if (percorre != NULL)
     {
-        percorre = *ponteiroParaListaAnalisada;
-        while (percorre != NULL)
+        int eVogal = false;
+
+        for (int i = 0; i < 5; i++)
         {
-            aux = percorre;
-            percorre = percorre->prox;
-            free(aux);
+            if (vogais[i] == percorre->letra)
+            {
+                eVogal = true;
+                break;
+            }
         }
 
-        *ponteiroParaListaAnalisada = NULL;
-        return 1;
+        int resto;
+
+        resto = percorre->numero % 10;
+        printf("\nPegou o resto = %d", resto);
+
+        if (resto == 0 && eVogal)
+        {
+            printf("\n Entrou no if ");
+            *contador++;
+        }
+
+        printf("\nsaiu do if atribuindo novo percorre");
+        percorre = percorre->prox;
+        printf("\nchegou pra chamar a recursiva");
+        if (percorre->prox != NULL)
+        {
+            recursiva(percorre, vogais, contador);
+        }
     }
-    return 0;
+}
+int analiseRecursiva(lista *ponteiroParaListaAnalisada)
+{
+    int *contador = 0;
+    char vogais[10] = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
+    lista *percorre;
+    percorre = ponteiroParaListaAnalisada;
+    recursiva(percorre, vogais, contador);
+
+    return *contador;
 }
