@@ -37,7 +37,7 @@ int inverterLista(listaSimples *lista, listaSimples **listaInvertida);
 int analiseRecursiva(listaSimples *lista);
 
 /*----------------------------------------------------
-|               FUNÇÃO PRINCIPAL              |
+|               FUNÇÃO PRINCIPAL                      |
 -----------------------------------------------------*/
 
 int main(void)
@@ -67,7 +67,7 @@ int main(void)
         {
         case 1:
             inicializar(&original);
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 5; i++)
             {
                 printf("\nNumero: ");
                 scanf("%d", &numero);
@@ -75,45 +75,39 @@ int main(void)
                 printf("Letra: ");
                 scanf("%c", &letra);
                 adicionar(numero, letra, &original);
+                imprimeLista(original);
             }
             break;
         case 2:
-            printf("\n-> Buscando NUMEROS mais e menos frequentes");
+            printf("\n-> Buscando NUMEROS mais e menos frequentes na lista\n");
             capturarOcorrencia(original, &ocorrencia);
-            printf("\n\n");
-            system("pause");
             break;
         case 3:
             imprimeOcorrencia(ocorrencia);
-            printf("\n\n");
-            system("pause");
             break;
 
         case 4:
             inicializar(&invertida);
-            printf("\n-> Invertendo lista");
+            printf("\n-> Invertendo lista\n");
             inverterLista(original, &invertida);
             imprimeLista(invertida);
-            printf("\n\n");
-            system("pause");
             break;
         case 5:
-            printf("\n-> Fazendo analise recursiva");
+            printf("\n-> Fazendo analise recursiva\n");
             resultadoRecursiva = analiseRecursiva(original);
             printf("\n-> Resultado: %d", resultadoRecursiva);
             break;
         case 6:
             imprimeLista(original);
-            printf("\n\n");
-            system("pause");
             break;
         case 7:
             break;
         default:
-            printf("\n\n Opcao nao valida");
+            printf("\n\n Opcao nao valida\n");
         }
         printf("\n\n");
         system("pause");
+        system("cls");
     } while ((opcao != 7));
 }
 
@@ -145,16 +139,25 @@ int adicionar(int numero, char letra, listaSimples **lista)
     }
     else
     {
-        listaSimples *percorre;
+        listaSimples *percorre, *antPercorre;
         percorre = *lista;
+        antPercorre = *lista;
 
-        while (percorre->prox != NULL && novoNo->numero < percorre->numero)
+        while (novoNo->numero > percorre->numero && percorre != NULL)
         {
+            antPercorre = percorre;
             percorre = percorre->prox;
         }
-
-        novoNo->prox = percorre;
-        *lista = novoNo;
+        if (percorre == *lista)
+        {
+            novoNo->prox = *lista;
+            *lista = novoNo;
+        }
+        else
+        {
+            novoNo->prox = antPercorre->prox;
+            antPercorre->prox = novoNo;
+        }
 
         return 0;
     }
@@ -166,7 +169,7 @@ int adicionar(int numero, char letra, listaSimples **lista)
 
 int capturarOcorrencia(listaSimples *lista, dadosDeOcorrencia **ocorrencia)
 {
-    printf("entrou 1");
+
     int maisFrequente = NULL,
         maiorFrequencia = 0,
         menosFrequente = NULL,
@@ -174,51 +177,51 @@ int capturarOcorrencia(listaSimples *lista, dadosDeOcorrencia **ocorrencia)
         frequenciaEmComparacao = 0,
         numeroEmComparacao = NULL;
 
-    printf("entrou 2");
     listaSimples *percorre1, *percorre2;
     percorre1 = lista;
-
-    printf("entrou 3");
+    percorre2 = lista;
 
     maisFrequente = percorre1->numero;
     menosFrequente = percorre1->numero;
 
-    printf("entrou 4");
-    while (percorre1->prox != NULL)
+    while (percorre1 != NULL)
     {
         numeroEmComparacao = percorre1->numero;
         frequenciaEmComparacao = 0;
         percorre2 = lista;
 
-        while (percorre2->prox != NULL)
+        while (percorre2 != NULL)
         {
+            printf("\n %d == %d", numeroEmComparacao, percorre2->numero);
             if (numeroEmComparacao == percorre2->numero)
             {
-                frequenciaEmComparacao++;
+
+                frequenciaEmComparacao = frequenciaEmComparacao + 1;
+                printf("\n contador == %d", frequenciaEmComparacao++);
             }
             percorre2 = percorre2->prox;
         }
 
-        if (maiorFrequencia <= frequenciaEmComparacao)
+        if (maiorFrequencia < frequenciaEmComparacao)
         {
             maiorFrequencia = frequenciaEmComparacao;
             maisFrequente = numeroEmComparacao;
         }
-        if (menorFrequencia >= frequenciaEmComparacao)
+        if (menorFrequencia > frequenciaEmComparacao && frequenciaEmComparacao == 0)
         {
             menorFrequencia = frequenciaEmComparacao;
             menosFrequente = numeroEmComparacao;
         }
         percorre1 = percorre1->prox;
     }
-    printf("entrou 5");
+
     dadosDeOcorrencia *novaCapturaDeOcorrencia;
-    printf("entrou 6");
+    novaCapturaDeOcorrencia = (dadosDeOcorrencia *)malloc(sizeof(dadosDeOcorrencia));
+
     novaCapturaDeOcorrencia->maisFrequente = maisFrequente;
     novaCapturaDeOcorrencia->maiorFrequencia = maiorFrequencia;
     novaCapturaDeOcorrencia->menosFrequente = menosFrequente;
     novaCapturaDeOcorrencia->menorFrequencia = menorFrequencia;
-    printf("entrou 7");
 
     *ocorrencia = novaCapturaDeOcorrencia;
 
@@ -236,11 +239,11 @@ int imprimeLista(listaSimples *lista)
     {
         return 1; /* lista vazia */
     }
-    printf("\nLISTA ::  \n");
+    printf("\n\n");
     while (lista != NULL)
     {
-        printf("\n %d", lista->numero);
-        printf(" %c\n", lista->letra);
+        printf("%d", lista->numero);
+        printf("-%c ", lista->letra);
         lista = lista->prox;
     }
     printf("\n");
@@ -303,23 +306,23 @@ int recursiva(listaSimples *percorre, char vogais[], int *contador)
 
     if (percorre->prox != NULL)
     {
-        int eVogal = false;
+        int eVogal = 0;
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
             if (vogais[i] == percorre->letra)
             {
-                eVogal = true;
+                eVogal = 1;
                 break;
             }
         }
 
         int resto;
-
         resto = percorre->numero % 10;
+
         printf("\nPegou o resto = %d", resto);
 
-        if (resto == 0 && eVogal)
+        if (resto == 0 && eVogal == 1)
         {
             *contador++;
             printf("\ncontador++");
