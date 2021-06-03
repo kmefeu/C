@@ -1,6 +1,7 @@
 /*----------------------------------------------------
 |               IMPORTAÇÃO DAS BIBLIOTECAS            |
 -----------------------------------------------------*/
+//Matheus Corrêa 202010270 ENG COMP
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,21 +20,14 @@ typedef struct L
     struct L *prox;
 } noListaSimples;
 
-typedef struct LI
+struct dadosDeOcorrencia
 {
-    int numero;
-    char letra;
-    struct LI *prox;
-} Reverse;
-
-struct Ex
-{
-    int Mais;
-    int Mais_qnt;
-    int Menos;
-    int Menos_qnt;
+    int maisFrequente;
+    int maiorFrequencia;
+    int menosFrequente;
+    int menorFrequencia;
     int flag;
-} c;
+} ocorrencia;
 
 /*----------------------------------------------------
 |               PROTOTIPOS DAS FUNÇÕES                |
@@ -41,11 +35,11 @@ struct Ex
 int inicializar(noListaSimples **lista);
 int adicionar(noListaSimples **lista);
 int imprimeLista(noListaSimples *lista);
-int inverterLista(noListaSimples **lista, Reverse **reverse_ini);
+int inverterLista(noListaSimples **lista, noListaSimples **listaInvertida);
 int capturarOcorrencia(noListaSimples *lista);
 int imprimeOcorrencia();
-int analiseRecursiva(noListaSimples *lista, int *quant);
-int tamanhoLista(noListaSimples *lista, int *tam);
+int analiseRecursiva(noListaSimples *lista, int *contagem);
+int tamanhoLista(noListaSimples *lista, int *tamanho);
 
 /*----------------------------------------------------
 |               FUNÇÃO PRINCIPAL                      |
@@ -55,15 +49,12 @@ int main()
 {
     setlocale(LC_ALL, "Portuguese");
 
-    int feedback, opcao, quant = 0;
-    noListaSimples *ini;
-    Reverse *reverse_ini;
-    c.flag = false;
-    feedback = inicializar(&ini);
-    feedback = inicializar(&reverse_ini);
+    int opcao, contagem = 0;
+    noListaSimples *ini, *listaInvertida;
+    ocorrencia.flag = false;
 
-    printf("P1 LABORATÓRIO DE ESTRUTURA DE numeroS");
-    printf("MATHEUS CORRÊA RA:202010270");
+    inicializar(&ini);
+    inicializar(&listaInvertida);
 
     do
     {
@@ -81,53 +72,39 @@ int main()
         switch (opcao)
         {
         case 1:
-            feedback = adicionar(&ini);
-            if (feedback == 0)
-            {
-                printf("\nInserção realizada com sucesso!\n");
-            }
-            else
-            {
+            adicionar(&ini);
+            break;
 
-                printf("\nFalha na incerção!\n");
-            }
-            break;
         case 2:
-            feedback = capturarOcorrencia(ini);
-            if (feedback == 1)
-                printf("Lista vazia!\n");
+            capturarOcorrencia(ini);
+            printf("\n\nOcorrências registradas com sucesso!");
             break;
+
         case 3:
-            feedback = imprimeOcorrencia();
-            if (feedback == 1)
-                printf("Execute a opcao 2 antes!\n");
+            imprimeOcorrencia();
             break;
+
         case 4:
-            feedback = inverterLista(&ini, &reverse_ini);
-            if (feedback == 1)
-                printf("Lista vazia!\n");
+            inverterLista(&ini, &listaInvertida);
             break;
 
         case 5:
-            feedback = analiseRecursiva(ini, &quant);
-            if (feedback == 1)
-                printf("Lista vazia!\n");
-            else
-                printf("Existem %d nos com vogais e numeros divisiveis por 10!", quant);
+            contagem = 0;
+            analiseRecursiva(ini, &contagem);
+            printf("Resultado: %d", contagem);
             break;
+
         case 6:
-            feedback = imprimeLista(ini);
-            if (feedback == 1)
-            {
-                printf("\nLista vazia. Impossivel listar");
-            }
+            imprimeLista(ini);
             break;
+
         case 7:
-            printf("\n\n Fechando programa");
+            printf("\n\nFechando programa");
             break;
         default:
-            printf("\n\n Opcao nao valida");
+            printf("\n\nOpção invalida");
         }
+        printf("\n\n");
         system("pause");
         system("cls");
 
@@ -153,21 +130,22 @@ int inicializar(noListaSimples **lista)
 
 int adicionar(noListaSimples **lista)
 {
-    noListaSimples *aux1, *aux2;
-    int numero;
-    char letra;
 
     for (int i = 1; i < 5; i++)
     {
-        noListaSimples *novoNo;
+        int numero;
+        char letra;
         printf("\nNumero: ");
         scanf("%d", &numero);
         printf("Letra: ");
         fflush(stdin);
         scanf("%c", &letra);
+
+        noListaSimples *novoNo;
         novoNo = (noListaSimples *)malloc(sizeof(noListaSimples));
         novoNo->numero = numero;
         novoNo->letra = letra;
+
         if (*lista == NULL)
         {
 
@@ -176,16 +154,16 @@ int adicionar(noListaSimples **lista)
         }
         else
         {
-            noListaSimples *atual = *lista;
-            noListaSimples *ant = *lista;
-            while (atual != NULL && atual->numero < novoNo->numero)
+            noListaSimples *noAtual = *lista;
+            noListaSimples *noAnterior = *lista;
+            while (noAtual != NULL && noAtual->numero < novoNo->numero)
             {
 
-                ant = atual;
-                atual = atual->prox;
+                noAnterior = noAtual;
+                noAtual = noAtual->prox;
             }
 
-            if (atual == *lista)
+            if (noAtual == *lista)
             {
 
                 novoNo->prox = *lista;
@@ -193,8 +171,8 @@ int adicionar(noListaSimples **lista)
             }
             else
             {
-                novoNo->prox = ant->prox;
-                ant->prox = novoNo;
+                novoNo->prox = noAnterior->prox;
+                noAnterior->prox = novoNo;
             }
         }
     }
@@ -208,55 +186,57 @@ int adicionar(noListaSimples **lista)
 
 int capturarOcorrencia(noListaSimples *lista)
 {
-    int i = 0, aux1, cont = 0, cont_Mais = 0, cont_Menos = 1000, Mais, Menos, len;
-    noListaSimples *percorre;
-    noListaSimples *aux2;
-    aux2 = lista;
+    int i = 0, numeroEmComparacao, contador = 0, maiorFrequencia = 0, menorFrequencia = 1000, maisFrequente, menosFrequente;
+    noListaSimples *noAtual, *inicioLista;
+
+    inicioLista = lista;
 
     if (lista == NULL)
     {
+        printf("\n\nLista Vazia");
         return 1;
     }
 
     while (lista != NULL)
     {
 
-        aux1 = lista->numero;
-        percorre = aux2;
-        while (percorre != NULL)
+        numeroEmComparacao = lista->numero;
+
+        noAtual = inicioLista;
+
+        while (noAtual != NULL)
         {
-            if (percorre->numero == aux1)
+            if (noAtual->numero == numeroEmComparacao)
             {
-                cont++;
+                contador++;
             }
-            if (percorre->prox == NULL)
+            if (noAtual->prox == NULL)
             {
-                if (cont > cont_Mais)
+                if (contador > maiorFrequencia)
                 {
-                    Mais = aux1;
-                    cont_Mais = cont;
+                    maisFrequente = numeroEmComparacao;
+                    maiorFrequencia = contador;
                 }
 
-                if (cont_Menos >= cont && cont != 0)
+                if (menorFrequencia >= contador && contador != 0)
                 {
-                    Menos = aux1;
-                    cont_Menos = cont;
+                    menosFrequente = numeroEmComparacao;
+                    menorFrequencia = contador;
                 }
             }
 
-            percorre = percorre->prox;
+            noAtual = noAtual->prox;
         }
-        cont = 0;
+        contador = 0;
         lista = lista->prox;
     }
-    //Salvando em outra struct
-    c.Mais = Mais;
-    c.Mais_qnt = cont_Mais;
-    c.Menos = Menos;
-    c.Menos_qnt = cont_Menos;
-    c.flag = true;
 
-    printf("\nElementos definidos com sucesso!\n");
+    ocorrencia.maisFrequente = maisFrequente;
+    ocorrencia.maiorFrequencia = maiorFrequencia;
+    ocorrencia.menosFrequente = menosFrequente;
+    ocorrencia.menorFrequencia = menorFrequencia;
+    ocorrencia.flag = true;
+
     return 0;
 }
 
@@ -269,7 +249,8 @@ int imprimeLista(noListaSimples *lista)
     int i;
     if (lista == NULL)
     {
-        return 1; /* lista vazia */
+        printf("\n\nLista Vazia");
+        return 1;
     }
 
     printf("\n\n");
@@ -291,16 +272,20 @@ int imprimeLista(noListaSimples *lista)
 
 int imprimeOcorrencia()
 {
-    if (c.flag == false)
+    if (ocorrencia.flag == false)
     {
+        printf("\n\nAcionar primeiro a opção 2");
         return 1;
     }
-    else
 
-        printf("\nElemento que mais aparece na lista: %d\n", c.Mais);
-    printf(" %d vezes!\n", c.Mais_qnt);
-    printf("\nElemento que menos aparece na lista: %d\n", c.Menos);
-    printf(" %d vezes!\n", c.Menos_qnt);
+    printf("\nElemento mais frequete da lista: %d, ", ocorrencia.maisFrequente);
+    printf("Com uma frequencia de  %d vezes.\n", ocorrencia.maiorFrequencia);
+
+    printf("\nElemento menos frequente da lista: %d, ", ocorrencia.menosFrequente);
+    printf("Com uma frequencia de  %d vezes.\n", ocorrencia.menorFrequencia);
+
+    printf("\n");
+
     return 0;
 }
 
@@ -308,66 +293,56 @@ int imprimeOcorrencia()
 |               CRIA LISTA INVERTIDA                  |
 -----------------------------------------------------*/
 
-int inverterLista(noListaSimples **lista, Reverse **reverse_ini)
+int inverterLista(noListaSimples **lista, noListaSimples **listaInvertida)
 {
-    int i, len, count = 1;
-    noListaSimples *percorre, *aux_1, *aux_2, *aux_3;
+
+    int i, count = 1, tam = 0;
+    noListaSimples *inversor, *novoNo, *percorre, *percorre2;
+
+    inversor = *lista;
     percorre = *lista;
-    Reverse *no_invertido, *percorre2;
-    tamanhoLista(*lista, &len);
-    aux_1 = *lista;
 
-    if (*lista == NULL)
+    while (inversor != NULL)
     {
-        return 1;
-    }
-
-    else
-        while (percorre != NULL)
+        tam++;
+        if (inversor->prox == NULL)
         {
-            aux_1 = *lista;
-            no_invertido = (Reverse *)malloc(sizeof(Reverse));
-
-            for (i = 0; i < len - count; i++)
-            {
-
-                aux_1 = aux_1->prox;
-            }
-
-            count++;
-
-            no_invertido->numero = aux_1->numero;
-            no_invertido->letra = aux_1->letra;
-
-            if (*reverse_ini == NULL)
-            {
-
-                no_invertido->prox = NULL;
-                *reverse_ini = no_invertido;
-            }
-            else
-            {
-                percorre2 = *reverse_ini;
-
-                while (percorre2->prox != NULL)
-                {
-                    percorre2 = percorre2->prox;
-                }
-
-                percorre2->prox = no_invertido;
-                no_invertido->prox = NULL;
-            }
-            percorre = percorre->prox;
+            break;
         }
-
-    printf("\n\nLISTA INVERTIDA::\n");
-    while (*reverse_ini != NULL)
-    {
-        printf("\n %d", (*reverse_ini)->numero);
-        printf(" %c", (*reverse_ini)->letra);
-        *reverse_ini = (*reverse_ini)->prox;
+        inversor = inversor->prox;
     }
-    printf("\n");
+
+    while (percorre != NULL)
+    {
+        inversor = *lista;
+        novoNo = (noListaSimples *)malloc(sizeof(noListaSimples));
+
+        for (i = 0; i < tam - count; i++)
+        {
+            inversor = inversor->prox;
+        }
+        count++;
+        novoNo->numero = inversor->numero;
+        novoNo->letra = inversor->letra;
+        if (*listaInvertida == NULL)
+        {
+            novoNo->prox = NULL;
+            *listaInvertida = novoNo;
+        }
+        else
+        {
+            percorre2 = *listaInvertida;
+            while (percorre2->prox != NULL)
+            {
+                percorre2 = percorre2->prox;
+            }
+            percorre2->prox = novoNo;
+            novoNo->prox = NULL;
+        }
+        percorre = percorre->prox;
+    }
+    imprimeLista(*listaInvertida);
+
     return 0;
 }
 
@@ -375,9 +350,9 @@ int inverterLista(noListaSimples **lista, Reverse **reverse_ini)
 |                 ANALISE RECURSIVA                   |
 -----------------------------------------------------*/
 
-int analiseRecursiva(noListaSimples *lista, int *quant)
+int analiseRecursiva(noListaSimples *lista, int *contagem)
 {
-    char vogais[11] = {'A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u'}; // size = 10 das vogais
+    char vogais[11] = {'A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u'};
     int size = 10, i;
 
     if (lista == NULL)
@@ -393,7 +368,7 @@ int analiseRecursiva(noListaSimples *lista, int *quant)
             if (lista->letra == vogais[i])
             {
 
-                *quant = *quant + 1;
+                *contagem = *contagem + 1;
             }
         }
     }
@@ -401,30 +376,28 @@ int analiseRecursiva(noListaSimples *lista, int *quant)
     {
         return 0;
     }
-    else
-
-        return analiseRecursiva((lista->prox), quant);
+    return analiseRecursiva((lista->prox), contagem);
 }
 
 /*----------------------------------------------------
 |                OBTER TAMANHO DA LISA                |
 -----------------------------------------------------*/
 
-int tamanhoLista(noListaSimples *lista, int *tam)
+int tamanhoLista(noListaSimples *lista, int *tamanho)
 {
     noListaSimples *percorre;
-    *tam = 0;
+    *tamanho = 0;
     if (lista != NULL)
     {
         percorre = lista;
         while (percorre != NULL)
         {
-            (*tam)++;
+            (*tamanho)++;
             percorre = percorre->prox;
         }
     }
     else
     {
-        *tam = 0;
+        *tamanho = 0;
     }
 }
