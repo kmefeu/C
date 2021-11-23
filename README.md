@@ -1,4 +1,3 @@
-
 # Solved exercises - programming logic applied in C language
 
 ## Some short comments for you to understand the repository.
@@ -13,7 +12,6 @@ in several other ways, many of them even more efficient, but in some exercises i
 
 Feel free to use and collaborate with the repository.
 
-
 ## Most relevant exercises
 
 [Calculadora Básica](https://github.com/kmefeu/C/blob/master/S1-CLASS-3-FOR-SWITCH-CASE/ex9-calculadora.c)
@@ -26,10 +24,9 @@ Feel free to use and collaborate with the repository.
 
 [Contador de Vogais](https://github.com/kmefeu/C/blob/master/S2-CLASS-1-MATRIZ/ex2-contador-vogais.c)
 
-
 ## Running C files in your computer
 
-I know two ways of making C file run in your computer. 
+I know two ways of making C file run in your computer.
 
 1# Using [Codebloks Installer](https://www.codeblocks.org/downloads/binaries/), probaly is the easyest way! If you dont mind installign Codebloks when you download it and install the [codeblocks-20.03mingw-setup.exe](https://sourceforge.net/projects/codeblocks/files/Binaries/20.03/Windows/codeblocks-20.03mingw-setup.exe/download) the Codeblocks will setup the gcc compiler that allow your computer to run C files.
 
@@ -38,3 +35,9 @@ I know two ways of making C file run in your computer.
 [C/C++ Microsoft](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools),
 [C/C++ Compile Run](https://marketplace.visualstudio.com/items?itemName=danielpinto8zz6.c-cpp-compile-run),
 [Code Runner](https://marketplace.visualstudio.com/items?itemName=formulahendry.code-runner).
+
+## Add pthread.h on windows
+
+https://docs.microsoft.com/en-us/answers/questions/76739/fatal-error-c1083-cannot-open-include-file-39pthre.html
+
+https://github.com/microsoft/vcpkg/issues/3842

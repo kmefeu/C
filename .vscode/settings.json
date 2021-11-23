@@ -1,6 +1,7 @@
 {
-    "files.associations": {
-        "1.C": "cpp",
-        "ctype.h": "c"
-    }
+  "files.associations": {
+    "1.C": "cpp",
+    "ctype.h": "c",
+    "pthread.h": "c"
+  }
 }
